@@ -1,5 +1,4 @@
-import Persons.Member;
-import Persons.Person;
+
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -11,17 +10,19 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Objects;
 
+import persons.Person;
+
 public class Application {
 
-    private final Person clueLess = new Member();
-    private final Person ed = new Member();
+    private final Person clueLess = new Person();
+    private final Person ed = new Person();
     private Class clazz;
     private Object instance;
     private static final Application application = new Application();
 
     public static void main(String... args) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, IOException {
 
-        application.loadClazzFromJavaArchive();
+        /*application.loadClazzFromJavaArchive();
         application.provideInstanceOfClass();
         int i = 0;
         while (i == 0) {
@@ -133,5 +134,7 @@ public class Application {
         }
 
         System.out.println();
-    }
+    }*/
+
+
 }

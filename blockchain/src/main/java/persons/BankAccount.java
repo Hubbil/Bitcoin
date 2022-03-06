@@ -1,4 +1,4 @@
-package BankAccount;
+package persons;
 
 public class BankAccount {
 
