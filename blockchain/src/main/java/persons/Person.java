@@ -17,14 +17,19 @@ public class Person {
 
     public void pay(float amount, String bitcoinAdress){
         Utility.processLog("Transaction initiated");
+        Utility.processLog("TX Broadcast to miners");
         PublicKey publicKey = Configuration.INSTANCE.adressTable.get(bitcoinAdress);
+        Utility.processLog("Structating block");
         Block block = new Block(Configuration.INSTANCE.blockchain.get(Configuration.INSTANCE.blockchain.size()).getHash());
         block.addTransaction(wallet.sendFunds(publicKey,amount));
+        Utility.processLog("PoW Miner selection");
         Miner miner = Blockchain.pickRandomMiner(Configuration.INSTANCE.miners);
         miner.mine(block);
     }
 
     public void exchangeForBitcoin(int amount){
+        Utility.processLog("Transaction initiated");
+        Utility.processLog("TX Broadcast to miners");
         Wallet coinbase = new Wallet();
         ArrayList<TransactionInput> inputs = new ArrayList<>();
         TransactionOutput output = new TransactionOutput(wallet.getPublicKey(),amount / 0.000019f,Configuration.INSTANCE.blockchain.get(Configuration.INSTANCE.blockchain.size()).getTransactions().get(0).getId());
@@ -34,13 +39,16 @@ public class Person {
         Transaction transaction = new Transaction(coinbase.getPublicKey(), wallet.getPublicKey(),amount / 0.000019f,inputs );
         transaction.setExchangeTransaction(true);
         transaction.generateSignature(coinbase.getPrivateKey());
+        Utility.processLog("Structating block");
         Block block = new Block(Configuration.INSTANCE.blockchain.get(Configuration.INSTANCE.blockchain.size()).getHash());
         block.addTransaction(transaction);
+        Utility.processLog("PoW Miner selection");
         Miner miner = Blockchain.pickRandomMiner(Configuration.INSTANCE.miners);
         miner.mine(block);
     }
 
     public void initializeBlockchain() {
+        Utility.processLog("Initialise Blockchain");
         Wallet coinbase = new Wallet();
         Configuration.INSTANCE.genesisTransaction = new Transaction(coinbase.getPublicKey(), new Wallet().getPublicKey(), 100f, null);
         Configuration.INSTANCE.genesisTransaction.generateSignature(coinbase.getPrivateKey());

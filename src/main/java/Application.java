@@ -10,12 +10,10 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Objects;
 
-import persons.Person;
-
 public class Application {
 
-    private final Person clueLess = new Person();
-    private final Person ed = new Person();
+    /*private final Person clueLess = new Person();
+    private final Person ed = new Person();*/
     private Class clazz;
     private Object instance;
     private static final Application application = new Application();
@@ -133,8 +131,8 @@ public class Application {
             e.printStackTrace();
         }
 
-        System.out.println();
-    }*/
+        System.out.println();*/
+    }
 
 
 }

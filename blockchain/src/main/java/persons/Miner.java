@@ -26,5 +26,8 @@ public class Miner {
         newBlock.mineBlock(Configuration.INSTANCE.difficulty);
         Configuration.INSTANCE.blockchain.add(newBlock);
         Utility.toBlockchainJSON(Configuration.INSTANCE.blockchain);
+        Utility.processLog("Block broadcast");
+        Utility.processLog("Block verification");
+        Utility.processLog("Block added");
     }
 }
