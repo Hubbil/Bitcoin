@@ -41,7 +41,6 @@ public class Transaction {
     public boolean processTransaction() {
         Utility.processLog("Validate Transaction");
         if (verifySignature()) {
-            System.out.println("#transaction signature failed to verify");
             return false;
         }
 
@@ -50,7 +49,6 @@ public class Transaction {
         }
 
         if (getInputsValue() < Configuration.INSTANCE.minimumTransaction) {
-            System.out.println("#transaction input to small | " + getInputsValue());
             return false;
         }
 

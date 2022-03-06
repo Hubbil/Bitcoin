@@ -1,6 +1,8 @@
 
 
-import persons.Person;
+import blockchain.Block;
+import blockchain.Blockchain;
+import Persons.*;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -14,14 +16,16 @@ import java.util.Objects;
 
 public class Application {
 
-    private final Person clueLess = new Person();
-    private final Person ed = new Person();
+    private final Person clueLess = new Person("clueless");
+    private final Person ed = new Person("ed");
     private Class clazz;
     private Object instance;
     private static final Application application = new Application();
+    private final Blockchain blockchain = new Blockchain();
 
     public static void main(String... args) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, IOException {
-
+        Person SatoshiNakamoto = new Person("Statoshi Nakamoto");
+        SatoshiNakamoto.initializeBlockchain();
         application.loadClazzFromJavaArchive();
         application.provideInstanceOfClass();
         int i = 0;
@@ -31,7 +35,7 @@ public class Application {
             BufferedReader in1 = new BufferedReader(new InputStreamReader(System.in));
             in = in1.readLine();
             command = in.split(" ");
-            if (Objects.equals(command[0], "launch http://www.trust-me.mcg/report.jar")) {
+            if (Objects.equals(in, "launch http://www.trust-me.mcg/report.jar")) {
                 application.launch();
             }
 
@@ -83,7 +87,7 @@ public class Application {
 
     public void showBalance(){
         System.out.println("BankCredit: "+clueLess.getBankAccount().getCredit());
-        System.out.println("BitcoinCredit: "+clueLess.getWallet().getBalance());
+        System.out.println("BitcoinCredit: "+clueLess.getWallet().getAmount());
     }
 
     public void showRecipient(){
@@ -123,7 +127,6 @@ public class Application {
     }
 
     public void executeMethodDirectlyWithoutPort(String method1) {
-        System.out.println("--- executeMethodDirectlyWithoutPort");
 
         try {
             Method method = clazz.getDeclaredMethod(method1);

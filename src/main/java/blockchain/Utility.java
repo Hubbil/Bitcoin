@@ -90,16 +90,27 @@ public class Utility {
         return new String(new char[difficulty]).replace('\0', '0');
     }
 
-    public static String toBlockchainJSON(Object o){
-        String blockchainJson = new GsonBuilder().setPrettyPrinting().create().toJson(o);
+    public static void toBlockchainJSON(Object o){
+
+        String test = o.toString();
         try {
-            FileWriter jsonFile = new FileWriter("blockchain.json");
-            jsonFile.write(blockchainJson);
-            jsonFile.close();
-        } catch (Exception e) {
-            System.err.println("error | cannot write blockchain to JSON");
+            BufferedWriter file = new BufferedWriter(new FileWriter("blockchain.json", true));
+            file.write(test);
+            file.write("\n");
+            file.close();
+        } catch (IOException e) {
+            System.out.println("Error: " + e);
         }
-        return blockchainJson;
+//        GsonBuilder gsonBuilder = new GsonBuilder();
+//        String blockchainJson = gsonBuilder.setPrettyPrinting().create().toJson(o);
+//        try {
+//            FileWriter jsonFile = new FileWriter("blockchain.json");
+//            jsonFile.write(blockchainJson);
+//            jsonFile.close();
+//        } catch (Exception e) {
+//            System.err.println("error | cannot write blockchain to JSON");
+//        }
+//        return blockchainJson;
     }
 
     public static void processLog(String o){

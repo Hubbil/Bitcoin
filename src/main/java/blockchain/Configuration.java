@@ -1,7 +1,7 @@
 package blockchain;
 
-import persons.Miner;
-import persons.Wallet;
+import Persons.Miner;
+import Persons.Wallet;
 
 import java.security.PublicKey;
 import java.util.ArrayList;

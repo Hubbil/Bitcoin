@@ -54,7 +54,6 @@ public class Block {
             hash = calculateHash();
         }
 
-        System.out.println("block mined | " + hash);
     }
 
     public void addTransaction(Transaction transaction) {
@@ -64,12 +63,10 @@ public class Block {
 
         if (!Objects.equals(previousHash, "0")) {
             if (!transaction.processTransaction()) {
-                System.out.println("transaction failed to process");
                 return;
             }
         }
 
         transactions.add(transaction);
-        System.out.println("transaction added to block");
     }
 }
