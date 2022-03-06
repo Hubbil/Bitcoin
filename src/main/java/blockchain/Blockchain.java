@@ -19,7 +19,7 @@ public class Blockchain {
         Configuration.INSTANCE.miners.add(bob);
     }
 
-    public static void isChainValid() {
+    public static boolean isChainValid() {
         Block currentBlock;
         Block previousBlock;
         String hashTarget = Utility.getDifficultyString(Configuration.INSTANCE.difficulty);
@@ -32,17 +32,17 @@ public class Blockchain {
 
             if (!currentBlock.getHash().equals(currentBlock.calculateHash())) {
                 System.out.println("#current hashes not equal");
-                return;
+                return false;
             }
 
             if (!previousBlock.getHash().equals(currentBlock.getPreviousHash())) {
                 System.out.println("#previous hashes not equal");
-                return;
+                return false;
             }
 
             if (!currentBlock.getHash().substring(0, Configuration.INSTANCE.difficulty).equals(hashTarget)) {
                 System.out.println("#block not mined");
-                return;
+                return false;
             }
 
             TransactionOutput tempOutput;
@@ -51,25 +51,27 @@ public class Blockchain {
 
                 if (currentTransaction.verifySignature()) {
                     System.out.println("#Signature on blockchain.Transaction(" + t + ") is Invalid");
-                    return;
+                    return false;
                 }
 
                 if (currentTransaction.getInputsValue() != currentTransaction.getOutputsValue()) {
                     System.out.println("#Inputs are not equal to outputs on blockchain.Transaction(" + t + ")");
-                    return;
+                    return false;
                 }
 
                 for (TransactionInput input : currentTransaction.getInputs()) {
                     tempOutput = tempUTXOs.get(input.getId());
 
-                    if (tempOutput == null) {
-                        System.out.println("#referenced input on transaction(" + t + ") is missing");
-                        return;
-                    }
+                    if (!currentTransaction.isExchangeTransaction()) {
+                        if (tempOutput == null) {
+                            System.out.println("#referenced input on transaction(" + t + ") is missing");
+                            return false;
+                        }
 
-                    if (input.getUTX0().getValue() != tempOutput.getValue()) {
-                        System.out.println("#referenced input on transaction(" + t + ") value invalid");
-                        return;
+                        if (input.getUTX0().getValue() != tempOutput.getValue()) {
+                            System.out.println("#referenced input on transaction(" + t + ") value invalid");
+                            return false;
+                        }
                     }
 
                     tempUTXOs.remove(input.getId());
@@ -81,16 +83,17 @@ public class Blockchain {
 
                 if (currentTransaction.getOutputs().get(0).getRecipient() != currentTransaction.getRecipient()) {
                     System.out.println("#transaction(" + t + ") output recipient is invalid");
-                    return;
+                    return false;
                 }
 
                 if (currentTransaction.getOutputs().get(1).getRecipient() != currentTransaction.getSender()) {
                     System.out.println("#transaction(" + t + ") output 'change' is not sender");
-                    return;
+                    return false;
                 }
             }
         }
         System.out.println("blockchain valid");
+        return true;
     }
 
     public static Miner pickRandomMiner(ArrayList<Miner> miners) {

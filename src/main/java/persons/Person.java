@@ -25,9 +25,10 @@ public class Person {
         Utility.processLog("PoW Miner selection");
         Miner miner = Blockchain.pickRandomMiner(Configuration.INSTANCE.miners);
         miner.mine(block);
+        wallet.setNewAmount(-amount);
     }
 
-    public void exchangeForBitcoin(int amount){
+    public void exchangeForBitcoin(float amount){
         Utility.processLog("Transaction initiated");
         Utility.processLog("TX Broadcast to miners");
         Wallet coinbase = new Wallet();
@@ -45,6 +46,8 @@ public class Person {
         Utility.processLog("PoW Miner selection");
         Miner miner = Blockchain.pickRandomMiner(Configuration.INSTANCE.miners);
         miner.mine(block);
+        wallet.setNewAmount(amount);
+        account.setNewCredit(-(amount / 0.000019f));
     }
 
     public void initializeBlockchain() {
@@ -75,5 +78,9 @@ public class Person {
 
     public Wallet getWallet() {
         return wallet;
+    }
+
+    public boolean checkPayment(){
+        return Blockchain.isChainValid();
     }
 }

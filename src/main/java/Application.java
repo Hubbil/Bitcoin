@@ -36,7 +36,7 @@ public class Application {
             }
 
             else if (Objects.equals(command[0], "exchange")) {
-                double amount = Double.parseDouble(command[1]);
+                float amount = Float.parseFloat(command[1]);
                 application.exchange(amount);
             }
 
@@ -53,7 +53,7 @@ public class Application {
             }
 
             else if (Objects.equals(command[0], "pay")) {
-                double amount = Double.parseDouble(command[1]);
+                float amount = Float.parseFloat(command[1]);
                 application.pay(amount);
             }
 
@@ -76,8 +76,8 @@ public class Application {
         System.out.println("Oops, your files have been encrypted. With a payment of 0.02755 BTC all files will be decrypted.");
     }
 
-    public void exchange(double amount){
-        clueLess.exchange(amount);
+    public void exchange(float amount){
+        clueLess.exchangeForBitcoin(amount);
         System.out.println("exchange "+ amount);
     }
 
@@ -90,13 +90,13 @@ public class Application {
         System.out.println("showRecipient");
     }
 
-    public void pay(double amount){
-        clueLess.getWallet().transfer(amount);
-        ed.getWallet().topUp(amount);
+    public void pay(float amount){
+        clueLess.pay(amount,ed.getWallet().getBitcoinAdress());
+        ed.getWallet().setNewAmount(amount);
     }
 
     public void checkPayment(){
-        if (ed.getWallet().transferSuccess()){
+        if (clueLess.checkPayment()){
             application.executeMethodDirectlyWithoutPort("decryptAll");
             System.out.println("Files decrypted");
         }

@@ -2,19 +2,15 @@ package persons;
 
 public class BankAccount {
 
-    private double credit;
+    private float credit;
 
     public BankAccount(){}
 
-    public void topUp(double amount){
-        this.credit = this.credit + amount;
-    }
-
-    public void transfer(double amount){
-        this.credit = this.credit - amount;
-    }
-
     public double getCredit() {
         return credit;
+    }
+
+    public void setNewCredit(float amount){
+        credit = credit + amount;
     }
 }
