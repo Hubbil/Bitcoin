@@ -17,10 +17,12 @@ public class Wallet {
     private PrivateKey privateKey;
     private PublicKey publicKey;
     private String bitcoinAdress;
+    private float amount;
 
     public Wallet() {
         generateKeyPair();
         Configuration.INSTANCE.adressTable.put(bitcoinAdress,publicKey);
+        amount = 0.0f;
     }
 
     private String adjustTo64(String string) {
@@ -146,5 +148,13 @@ public class Wallet {
 
     public String getBitcoinAdress(){
         return bitcoinAdress;
+    }
+
+    public float getAmount() {
+        return amount;
+    }
+
+    public void setNewAmount(float amount){
+        this.amount = this.amount + amount;
     }
 }
