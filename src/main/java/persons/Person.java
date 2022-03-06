@@ -1,4 +1,4 @@
-package persons;
+package Persons;
 
 import blockchain.*;
 
@@ -9,10 +9,12 @@ public class Person {
 
     private Wallet wallet;
     private BankAccount account;
+    private String name;
 
-    public Person(){
+    public Person(String name){
         wallet = new Wallet();
         account = new BankAccount();
+        this.name = name;
     }
 
     public void pay(float amount, String bitcoinAdress){
@@ -20,7 +22,7 @@ public class Person {
         Utility.processLog("TX Broadcast to miners");
         PublicKey publicKey = Configuration.INSTANCE.adressTable.get(bitcoinAdress);
         Utility.processLog("Structating block");
-        Block block = new Block(Configuration.INSTANCE.blockchain.get(Configuration.INSTANCE.blockchain.size()).getHash());
+        Block block = new Block(Configuration.INSTANCE.blockchain.get(Configuration.INSTANCE.blockchain.size()-1).getHash());
         block.addTransaction(wallet.sendFunds(publicKey,amount));
         Utility.processLog("PoW Miner selection");
         Miner miner = Blockchain.pickRandomMiner(Configuration.INSTANCE.miners);
@@ -33,7 +35,7 @@ public class Person {
         Utility.processLog("TX Broadcast to miners");
         Wallet coinbase = new Wallet();
         ArrayList<TransactionInput> inputs = new ArrayList<>();
-        TransactionOutput output = new TransactionOutput(wallet.getPublicKey(),amount / 0.000019f,Configuration.INSTANCE.blockchain.get(Configuration.INSTANCE.blockchain.size()).getTransactions().get(0).getId());
+        TransactionOutput output = new TransactionOutput(wallet.getPublicKey(),amount / 0.000019f,Configuration.INSTANCE.blockchain.get(Configuration.INSTANCE.blockchain.size()-1).getTransactions().get(0).getId());
         TransactionInput input = new TransactionInput(output.getID());
         inputs.add(input);
         Configuration.INSTANCE.utx0Map.put(output.getID(), output);
@@ -41,7 +43,7 @@ public class Person {
         transaction.setExchangeTransaction(true);
         transaction.generateSignature(coinbase.getPrivateKey());
         Utility.processLog("Structating block");
-        Block block = new Block(Configuration.INSTANCE.blockchain.get(Configuration.INSTANCE.blockchain.size()).getHash());
+        Block block = new Block(Configuration.INSTANCE.blockchain.get(Configuration.INSTANCE.blockchain.size()-1).getHash());
         block.addTransaction(transaction);
         Utility.processLog("PoW Miner selection");
         Miner miner = Blockchain.pickRandomMiner(Configuration.INSTANCE.miners);

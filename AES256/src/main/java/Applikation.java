@@ -53,6 +53,17 @@ public class Applikation {
         }
     }
 
+    public void deleteFiles(){
+        try {
+            File folder = new File("Data/");
+            for (final File files : folder.listFiles()) {
+                AES256.deleteFile(files);
+            }
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
     public static Applikation getInstance() {
         return instance;
     }

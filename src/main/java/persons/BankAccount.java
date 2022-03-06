@@ -1,10 +1,12 @@
-package persons;
+package Persons;
 
 public class BankAccount {
 
     private float credit;
 
-    public BankAccount(){}
+    public BankAccount(){
+        credit = 5000f;
+    }
 
     public double getCredit() {
         return credit;

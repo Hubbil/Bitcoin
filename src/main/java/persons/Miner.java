@@ -1,4 +1,4 @@
-package persons;
+package Persons;
 
 import blockchain.*;
 
@@ -20,7 +20,7 @@ public class Miner {
 
     public void mine(Block newBlock) {
         if (!newBlock.getTransactions().get(0).isExchangeTransaction()){
-            TransactionOutput output = new TransactionOutput(wallet.getPublicKey(), 0.025f, Configuration.INSTANCE.blockchain.get(Configuration.INSTANCE.blockchain.size()).getTransactions().get(0).getId());
+            TransactionOutput output = new TransactionOutput(wallet.getPublicKey(), 0.025f, Configuration.INSTANCE.blockchain.get(Configuration.INSTANCE.blockchain.size()-1).getTransactions().get(0).getId());
             Configuration.INSTANCE.utx0Map.put(output.getID(), output);
         }
         newBlock.mineBlock(Configuration.INSTANCE.difficulty);

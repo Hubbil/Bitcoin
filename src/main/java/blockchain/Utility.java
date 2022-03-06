@@ -101,16 +101,6 @@ public class Utility {
         } catch (IOException e) {
             System.out.println("Error: " + e);
         }
-//        GsonBuilder gsonBuilder = new GsonBuilder();
-//        String blockchainJson = gsonBuilder.setPrettyPrinting().create().toJson(o);
-//        try {
-//            FileWriter jsonFile = new FileWriter("blockchain.json");
-//            jsonFile.write(blockchainJson);
-//            jsonFile.close();
-//        } catch (Exception e) {
-//            System.err.println("error | cannot write blockchain to JSON");
-//        }
-//        return blockchainJson;
     }
 
     public static void processLog(String o){
