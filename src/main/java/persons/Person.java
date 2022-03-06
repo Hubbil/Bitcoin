@@ -68,4 +68,12 @@ public class Person {
         Configuration.INSTANCE.blockchain.add(genesisBlock);
         genesisBlock.mineBlock(Configuration.INSTANCE.difficulty);
     }
+
+    public BankAccount getBankAccount() {
+        return account;
+    }
+
+    public Wallet getWallet() {
+        return wallet;
+    }
 }

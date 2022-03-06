@@ -1,6 +1,5 @@
 package blockchain;
 
-import blockchain.Transaction;
 import com.google.gson.GsonBuilder;
 
 import java.io.BufferedWriter;
